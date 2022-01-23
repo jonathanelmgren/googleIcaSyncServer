@@ -10,7 +10,6 @@ import APIService from './src/shared/api/API/services/APIService.js'
 import axios from 'axios'
 import { decrypt } from './src/controllers/Crypto.js'
 
-
 console.log('Service is running')
 
 const { browser, page } = await initializeGoogleScraper()
@@ -24,7 +23,6 @@ cron.schedule('*/3 * * * *', async () => {
 	///Get shoppinglists from google
 	const googleShoppingLists = await GoogleShoppingListScraper(page)
 
-	//--THIS WILL EVENTUALLY BE A BACKGROUND JOB---//
 	for (const user of users) {
 		if (user.ica_user) user.ica_user = decrypt(user.ica_user)
 		if (user.ica_pass) user.ica_pass = decrypt(user.ica_pass)
@@ -43,6 +41,7 @@ cron.schedule('*/3 * * * *', async () => {
 				user.ica_token = token
 				await axios.put(`${process.env.API_URL}/user/${user._id}`, { ica_token: token })
 				icaShoppingList = await ShoppingList(user._id, user.ica_token, user.ica_shopping_list)
+				throw new Error('Wrong username or password')
 			}
 			//Get correct id of shoppinglist from ICA
 			if (icaShoppingList === undefined) icaShoppingList = await ShoppingList(user._id, user.ica_token, user.ica_shopping_list)
@@ -52,7 +51,7 @@ cron.schedule('*/3 * * * *', async () => {
 			const googleShoppingList = googleShoppingLists.filter((e) => e.id === user._id)[0]
 
 			//Get all products from Google list
-			if (googleShoppingList.items === undefined) throw new Error('No shoppinglist found')
+			if (googleShoppingList.items.length < 1) throw new Error('No shoppinglist found')
 			const googleProducts = googleShoppingList.items
 
 			//Get all products from ICA list

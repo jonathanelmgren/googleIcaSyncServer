@@ -1,36 +1,39 @@
 {
-  "name": "googleshoppinglist",
-  "version": "1.0.0",
-  "description": "Fetching googles shoppinglist",
-  "main": "server.js",
-  "type": "module",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server.js && nodemon service.js"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "axios": "^0.24.0",
-    "bcrypt": "^5.0.1",
-    "cors": "^2.8.5",
-    "dotenv": "^10.0.0",
-    "express": "^4.17.2",
-    "helmet": "^5.0.1",
-    "jsonwebtoken": "^8.5.1",
-    "mongoose": "^6.1.5",
-    "morgan": "^1.10.0",
-    "node-cron": "^3.0.0",
-    "nodemon": "^2.0.15",
-    "passport": "^0.5.2",
-    "passport-jwt": "^4.0.0",
-    "puppeteer": "^13.0.1",
-    "puppeteer-extra": "^3.2.3",
-    "puppeteer-extra-plugin-stealth": "^2.9.0"
-  },
-  "devDependencies": {
-    "@types/morgan": "^1.9.3",
-    "@types/passport": "^1.0.7",
-    "@types/passport-jwt": "^3.0.6"
-  }
+	"name": "googleshoppinglist",
+	"version": "1.0.0",
+	"engines": {
+		"node": "17.x"
+	},
+	"description": "Fetching googles shoppinglist",
+	"main": "server.js",
+	"type": "module",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"start": "nodemon server.js && nodemon service.js"
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"axios": "^0.24.0",
+		"bcrypt": "^5.0.1",
+		"cors": "^2.8.5",
+		"dotenv": "^10.0.0",
+		"express": "^4.17.2",
+		"helmet": "^5.0.1",
+		"jsonwebtoken": "^8.5.1",
+		"mongoose": "^6.1.5",
+		"morgan": "^1.10.0",
+		"node-cron": "^3.0.0",
+		"nodemon": "^2.0.15",
+		"passport": "^0.5.2",
+		"passport-jwt": "^4.0.0",
+		"puppeteer": "^13.0.1",
+		"puppeteer-extra": "^3.2.3",
+		"puppeteer-extra-plugin-stealth": "^2.9.0"
+	},
+	"devDependencies": {
+		"@types/morgan": "^1.9.3",
+		"@types/passport": "^1.0.7",
+		"@types/passport-jwt": "^3.0.6"
+	}
 }

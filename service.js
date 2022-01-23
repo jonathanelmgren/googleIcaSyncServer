@@ -41,7 +41,6 @@ cron.schedule('*/3 * * * *', async () => {
 				user.ica_token = token
 				await axios.put(`${process.env.API_URL}/user/${user._id}`, { ica_token: token })
 				icaShoppingList = await ShoppingList(user._id, user.ica_token, user.ica_shopping_list)
-				throw new Error('Wrong username or password')
 			}
 			//Get correct id of shoppinglist from ICA
 			if (icaShoppingList === undefined) icaShoppingList = await ShoppingList(user._id, user.ica_token, user.ica_shopping_list)
@@ -49,6 +48,7 @@ cron.schedule('*/3 * * * *', async () => {
 
 			//Get correct shoppinglist from Google
 			const googleShoppingList = googleShoppingLists.filter((e) => e.id === user._id)[0]
+			console.log(googleShoppingList)
 
 			//Get all products from Google list
 			if (googleShoppingList.items.length < 1) throw new Error('No shoppinglist found')
@@ -90,6 +90,8 @@ cron.schedule('*/3 * * * *', async () => {
 		} catch (e) {
 			console.log('Fail')
 			console.log(e.message)
+			if (e.message === 'Request failed with status code 401') e.message = 'Wrong username or password on ICA'
+			if (e.message === "Cannot read properties of undefined (reading 'items')") e.message = 'Google shoppinglist not renamed or shared correctly to googleicasync@elmgren.dev'
 			await axios.put(`${process.env.API_URL}/user/${user._id}`, { latest_sync: e.message })
 			continue
 		}

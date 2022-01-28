@@ -51,7 +51,7 @@ cron.schedule('*/3 * * * *', async () => {
 			console.log(googleShoppingList)
 
 			//Get all products from Google list
-			if (googleShoppingList.items.length < 1) throw new Error('No shoppinglist found')
+			if (googleShoppingList.items.length < 1) throw new Error('No items in Googles shopping list')
 			const googleProducts = googleShoppingList.items
 
 			//Get all products from ICA list

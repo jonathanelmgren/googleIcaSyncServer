@@ -7,6 +7,8 @@ export const initializeGoogleScraper = async () => {
 	const page = await browser.newPage()
 	await page.goto('https://shoppinglist.google.com/')
 
+	await page.waitForTimeout(1000)
+	
 	await page.type('[name=identifier]', process.env.GOOGLE_USER)
 
 	await page.click('#identifierNext')

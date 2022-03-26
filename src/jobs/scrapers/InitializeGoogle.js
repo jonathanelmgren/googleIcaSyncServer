@@ -3,7 +3,7 @@ import StealthPlugin from 'puppeteer-extra-plugin-stealth'
 
 export const initializeGoogleScraper = async () => {
 	puppeteer.use(StealthPlugin())
-	const browser = await puppeteer.launch({ args: ['--no-sandbox'] })
+	const browser = await puppeteer.launch({headless:false, args: ['--no-sandbox'] })
 	const page = await browser.newPage()
 	await page.goto('https://shoppinglist.google.com/')
 

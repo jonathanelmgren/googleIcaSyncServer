@@ -6,18 +6,23 @@ export const RemoveProductFromGoogle = async (page, listid, products) => {
 			const delay = (ms) => {
 				return new Promise((resolve, reject) => setTimeout(resolve, ms))
 			}
-			const allLists = document.querySelector('body > shopping-list-app > mat-sidenav-container > mat-sidenav > div > xap-deferred-loader-outlet > lists-menu > mat-nav-list.mat-nav-list.mat-list-base.navList.listsMenuItems.ng-star-inserted').children
+			const allLists = document.querySelector('#yDmH0d > c-wiz > gm-coplanar-drawer > div > div > nav > div.PlW26e').children
 			for (const list of allLists) {
-				const title = list.getElementsByClassName('title')[0].textContent.trim()
-				list.querySelector('.mat-list-item').click()
+				const title = list.getElementsByClassName('seMnD')[0].textContent.trim()
+				list.querySelector('div > div > div.seMnD').click()
 				await delay(1000)
 				if (title !== listid) continue
-				const items = document.getElementsByClassName('activeItem')
+				const itemss = document.querySelector('#yDmH0d > c-wiz > div.RVpJR > ul')
+				if (itemss === null) continue
+				const items = itemss.children
 				for (const item of items) {
-					const itemTitle = item.querySelector('shopping-list-item > base-list-item > div.contentContainer.gxLayout-column.gxLayoutAlign-center-start.gxFlex > button > span').textContent.trim()
-					const delbtn = item.querySelector('shopping-list-item > base-list-item > div.ng-star-inserted > div > div > span > button:nth-child(2)')
-					if (products.includes(itemTitle)) {
-						delbtn.click()
+					const textElement = item.getElementsByClassName('uZfMed')[0]
+					if (textElement === undefined) continue
+					const text = textElement.textContent.trim()
+					if (products.includes(text)) {
+						textElement.click()
+						await delay(500)
+						item.querySelector('div > button:nth-child(4) > i').click()
 						await delay(200)
 					}
 				}

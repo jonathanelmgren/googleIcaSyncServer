@@ -2,13 +2,14 @@ export const GoogleShoppingListScraper = async (page) => {
 	console.log('Refreshing page')
 	await page.goto('https://shoppinglist.google.com/')
 	await page.waitForTimeout(5000)
-	console.log('Evaliating')
+	console.log('Evaluating')
 	const shoppingLists = await page.evaluate(async () => {
 		const delay = (ms) => {
 			return new Promise((resolve, reject) => setTimeout(resolve, ms))
 		}
 		console.log('Get lists')
 		const allLists = document.querySelector('#yDmH0d > c-wiz > gm-coplanar-drawer > div > div > nav > div.PlW26e').children
+		console.log(allLists)
 		let arr = []
 		console.log('Loop through lists')
 		for (const list of allLists) {

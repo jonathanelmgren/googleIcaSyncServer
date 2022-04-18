@@ -8,8 +8,13 @@ export const GoogleShoppingListScraper = async (page) => {
 			return new Promise((resolve, reject) => setTimeout(resolve, ms))
 		}
 		console.log('Get lists')
-		/* const allLists = document.querySelector('#yDmH0d > c-wiz > gm-coplanar-drawer > div > div > nav > div.PlW26e').children
-		console.log(allLists) */
+		let allLists
+		try {
+			allLists = document.querySelector('#yDmH0d > c-wiz > gm-coplanar-drawer > div > div > nav > div.PlW26e').children
+		} catch (e) {
+			console.log(e.message)
+		}
+		console.log(allLists)
 		let arr = []
 		console.log('Loop through lists')
 		for (const list of allLists) {

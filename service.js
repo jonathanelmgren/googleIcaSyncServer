@@ -25,7 +25,12 @@ cron.schedule('*/2 * * * *', async () => {
 
 	console.log('Fetching shopping lists')
 	///Get shoppinglists from google
-	const googleShoppingLists = await GoogleShoppingListScraper(page)
+	let googleShoppingLists
+	try {
+		googleShoppingLists = await GoogleShoppingListScraper(page)
+	} catch (e) {
+		console.log(e.message)
+	}
 
 	for (const user of users) {
 		console.log('User: ' + user.username)
@@ -83,7 +88,7 @@ cron.schedule('*/2 * * * *', async () => {
 					await AddProductToICA(product, icaShoppingListId, user.ica_token)
 				}
 			}
-			
+
 			//If products is bought in ICA list, remove from both ICA and Google list
 			console.log('Removing items from Google if item has been bought in ICA list')
 			if (productsBoughtInICA.length > 0) {

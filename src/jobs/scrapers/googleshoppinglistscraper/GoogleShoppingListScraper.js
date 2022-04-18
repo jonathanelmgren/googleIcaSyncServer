@@ -8,8 +8,8 @@ export const GoogleShoppingListScraper = async (page) => {
 			return new Promise((resolve, reject) => setTimeout(resolve, ms))
 		}
 		console.log('Get lists')
-		const allLists = document.querySelector('#yDmH0d > c-wiz > gm-coplanar-drawer > div > div > nav > div.PlW26e').children
-		console.log(allLists)
+		/* const allLists = document.querySelector('#yDmH0d > c-wiz > gm-coplanar-drawer > div > div > nav > div.PlW26e').children
+		console.log(allLists) */
 		let arr = []
 		console.log('Loop through lists')
 		for (const list of allLists) {
@@ -18,13 +18,13 @@ export const GoogleShoppingListScraper = async (page) => {
 			const title = list.getElementsByClassName('seMnD')[0].textContent.trim()
 			obj.id = title
 			console.log('Got list title')
-			
+
 			list.querySelector('div > div > div.seMnD').click()
 			console.log('Clicked shoppinglist')
 			await delay(1000)
 			const itemss = document.querySelector('#yDmH0d > c-wiz > div.RVpJR > ul')
 			console.log('Got lists')
-			if(itemss === null) continue
+			if (itemss === null) continue
 			const items = itemss.children
 			for (const item of items) {
 				console.log('Getting item')

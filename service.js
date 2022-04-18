@@ -14,11 +14,10 @@ console.log('Service is running')
 
 const { browser, page } = await initializeGoogleScraper()
 
-cron.schedule('*/30 * * * *', async () => {
+cron.schedule('*/2 * * * *', () => {
 	console.log(new Date())
 	//Get all users
-	const { data } = await APIService.getUsers()
-	const users = data
+	const { data: users } = await APIService.getUsers()
 
 	///Get shoppinglists from google
 	const googleShoppingLists = await GoogleShoppingListScraper(page)

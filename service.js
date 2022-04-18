@@ -12,28 +12,36 @@ import { decrypt } from './src/controllers/Crypto.js'
 
 console.log('Service is running')
 
+console.log('Initializing Puppeteer')
 const { browser, page } = await initializeGoogleScraper()
+console.log('Got the page from Puppeteer')
 
 cron.schedule('*/2 * * * *', async () => {
-	console.log(new Date())
+	console.log('Started cron-job: ' + new Date())
+
 	//Get all users
+	console.log('Fetching users')
 	const { data: users } = await APIService.getUsers()
 
+	console.log('Fetching shopping lists')
 	///Get shoppinglists from google
 	const googleShoppingLists = await GoogleShoppingListScraper(page)
 
 	for (const user of users) {
+		console.log('User: ' + user.username)
 		if (user.ica_user) user.ica_user = decrypt(user.ica_user)
 		if (user.ica_pass) user.ica_pass = decrypt(user.ica_pass)
 		if (user.ica_token) user.ica_token = decrypt(user.ica_token)
 		//Check if subscription has expired
 		try {
+			console.log('Checking subscription')
 			const currentDate = new Date()
 			const expireDate = new Date(user.subscription_end_date)
 			if (currentDate > expireDate || !user.subscription_end_date) throw new Error('Subscription not active')
 			//Get correct shoppinglist from ICA and authenticate if token is expired or non-existent
 			let icaShoppingList
 			try {
+				console.log('Getting ICA shopping list')
 				icaShoppingList = await ShoppingList(user._id, user.ica_token, user.ica_shopping_list)
 			} catch (e) {
 				const token = await Authenticate(user._id, user.ica_user, user.ica_pass)
@@ -43,11 +51,12 @@ cron.schedule('*/2 * * * *', async () => {
 			}
 			//Get correct id of shoppinglist from ICA
 			if (icaShoppingList === undefined) icaShoppingList = await ShoppingList(user._id, user.ica_token, user.ica_shopping_list)
+			if (!icaShoppingList) console.log('No ICA list found')
+
 			const icaShoppingListId = icaShoppingList.OfflineId
 
 			//Get correct shoppinglist from Google
 			const googleShoppingList = googleShoppingLists.filter((e) => e.id === user._id)[0]
-			console.log(googleShoppingList)
 
 			//Get all products from Google list
 			if (googleShoppingList.items.length < 1) throw new Error('No items in Googles shopping list')
@@ -65,6 +74,7 @@ cron.schedule('*/2 * * * *', async () => {
 			const productsMissingInICA = googleProducts.filter((x) => !icaProducts.includes(x))
 
 			//If products is missing in ICA the products from Google List should sync to ICA
+			console.log('Adding items to ICA from Google')
 			if (productsMissingInICA.length > 0) {
 				for (const productname of productsMissingInICA) {
 					const product = {
@@ -73,8 +83,9 @@ cron.schedule('*/2 * * * *', async () => {
 					await AddProductToICA(product, icaShoppingListId, user.ica_token)
 				}
 			}
-
+			
 			//If products is bought in ICA list, remove from both ICA and Google list
+			console.log('Removing items from Google if item has been bought in ICA list')
 			if (productsBoughtInICA.length > 0) {
 				for (const product of productsBoughtInICA) {
 					const itemIndex = icaShoppingList.Rows.findIndex((x) => x.ProductName === product)
